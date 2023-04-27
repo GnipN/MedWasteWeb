@@ -31,7 +31,7 @@ readImage_class41 = (file) => {
 	formData.append('file', file);
 	$.ajax({
 		   //url : 'https://medwaste-api.gezdev.com/class41',
-       url : 'http://172.16.9.126:5001/class41',
+       url : window.location.href + '/class41',
 		   type : 'POST',
 		   data : formData,
 		   processData: false,  // tell jQuery not to process the data
@@ -82,7 +82,7 @@ readImage_class4G = (file) => {
 	formData.append('file', file);
 	$.ajax({
 		   //url : 'https://medwaste-api.gezdev.com/class4G',
-       url : 'http://172.16.9.126:5001/class4G',
+       url : window.location.href + '/class4G',
 		   type : 'POST',
 		   data : formData,
 		   processData: false,  // tell jQuery not to process the data
@@ -131,7 +131,7 @@ readImage_yolov4_41 = (file) => {
 	formData.append('file', file);
 	$.ajax({
 		   //url : 'https://medwaste-api.gezdev.com/yolov4_41',
-       url : 'http://172.16.9.126:5001/yolov4_41',
+       url : window.location.href + '/yolov4_41',
 		   type : 'POST',
 		   data : formData,
 		   processData: false,  // tell jQuery not to process the data

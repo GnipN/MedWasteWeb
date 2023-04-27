@@ -1,6 +1,6 @@
 import os
 from datetime import datetime
-from flask import Flask, flash, redirect, jsonify, request, url_for
+from flask import Flask, flash, redirect, jsonify, request, url_for, render_template
 from flask_cors import CORS,cross_origin
 from werkzeug.utils import secure_filename
 import tensorflow as tf
@@ -51,25 +51,26 @@ app.config['JSON_SORT_KEYS'] = False
 
 @app.route('/')
 #@cross_origin(origin='https://medwaste-ai.gezdev.com',headers=['Content-Type','Authorization'])
-#@cross_origin(origin='*')
+# @cross_origin(origin='*')
 def show_index():
-    str =  """<!DOCTYPE html>
-<html>
-<head>
-<title>MedWaste-Prediction-BACKEND-API</title>
-</head>
-<body>
+    return render_template('index.html')
+#     str =  """<!DOCTYPE html>
+# <html>
+# <head>
+# <title>MedWaste-Prediction-BACKEND-API</title>
+# </head>
+# <body>
 
-<h1>Welcome to MedWaste-Prediction-BACKEND-API</h1>
-<p>This is MedWaste-Prediction-BACKEND-API</p>
-<p>use POST method to interact with the API</p>
-<p>/class41 <- with file that contain picture to classify medical_waste 41 classes </p>
-<p>/class4G <- with file that contain picture to classify medical_waste 4 groups ['1-InfectionWaste', '2-BloodSecretionWaste', '3-LabWardWaste', '4-VaccineOtherWaste'] </p>
-<p>/yolov4_41 <- with file that contain picture to detect medical_waste  41 classes by yolov4 </p>
-<p>41 medical_waste items contains ... ['1WayConnectorforFoley', '2WayConnectorforFoley', '2WayFoleyCatheter', '3WayConnectorforFoley', '3Waystopcock', 'AlcoholBottle', 'AlcoholPad', 'BootCover', 'CottonBall', 'CottonSwap', 'Dilator', 'DisposableInfusionSet', 'ExtensionTube', 'FaceShield', 'FrontLoadSyringe', 'GauzePad', 'Glove', 'GuideWire', 'LiquidBottle', 'Mask', 'NGTube', 'NasalCannula', 'Needle', 'OxygenMask', 'PPESuit', 'PharmaceuticalProduct', 'Pill', 'PillBottle', 'PrefilledHumidifier', 'PressureConnectingTube', 'ReusableHumidifier', 'SodiumChlorideBag', 'SterileHumidifierAdapter', 'SurgicalBlade', 'SurgicalCap', 'SurgicalSuit', 'Syringe', 'TrachealTube', 'UrineBag', 'Vaccinebottle', 'WingedInfusionSet']</p>
-</body>
-</html>"""
-    return str
+# <h1>Welcome to MedWaste-Prediction-BACKEND-API</h1>
+# <p>This is MedWaste-Prediction-BACKEND-API</p>
+# <p>use POST method to interact with the API</p>
+# <p>/class41 <- with file that contain picture to classify medical_waste 41 classes </p>
+# <p>/class4G <- with file that contain picture to classify medical_waste 4 groups ['1-InfectionWaste', '2-BloodSecretionWaste', '3-LabWardWaste', '4-VaccineOtherWaste'] </p>
+# <p>/yolov4_41 <- with file that contain picture to detect medical_waste  41 classes by yolov4 </p>
+# <p>41 medical_waste items contains ... ['1WayConnectorforFoley', '2WayConnectorforFoley', '2WayFoleyCatheter', '3WayConnectorforFoley', '3Waystopcock', 'AlcoholBottle', 'AlcoholPad', 'BootCover', 'CottonBall', 'CottonSwap', 'Dilator', 'DisposableInfusionSet', 'ExtensionTube', 'FaceShield', 'FrontLoadSyringe', 'GauzePad', 'Glove', 'GuideWire', 'LiquidBottle', 'Mask', 'NGTube', 'NasalCannula', 'Needle', 'OxygenMask', 'PPESuit', 'PharmaceuticalProduct', 'Pill', 'PillBottle', 'PrefilledHumidifier', 'PressureConnectingTube', 'ReusableHumidifier', 'SodiumChlorideBag', 'SterileHumidifierAdapter', 'SurgicalBlade', 'SurgicalCap', 'SurgicalSuit', 'Syringe', 'TrachealTube', 'UrineBag', 'Vaccinebottle', 'WingedInfusionSet']</p>
+# </body>
+# </html>"""
+#     return str
 
 ALLOWED_EXTENSIONS = set(['bmp', 'png', 'jpg', 'jpeg'])
 

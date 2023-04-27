@@ -7,6 +7,8 @@
 !/backend/im_cache/.gitkeep
 /backend/static/*
 !/backend/static/.gitkeep
+!/backend/static/css
+!/backend/static/js
 /backend/__pycache__
 /__pycache__
 /backend/Python-3.8.10
