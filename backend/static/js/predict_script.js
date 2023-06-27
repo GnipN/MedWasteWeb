@@ -82,7 +82,7 @@ readImage_class4G = (file) => {
 	formData.append('file', file);
 	$.ajax({
 		   //url : 'https://medwaste-api.gezdev.com/class4G',
-       url : window.location.href + '/class4G',
+       url : window.location.href + '/Dur',
 		   type : 'POST',
 		   data : formData,
 		   processData: false,  // tell jQuery not to process the data

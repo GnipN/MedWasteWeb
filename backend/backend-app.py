@@ -16,21 +16,37 @@ import json
 directory = os.getcwd()
 print(f'Run code at {directory}.\n\n')
 
-class_names_41classes = ['1WayConnectorforFoley', '2WayConnectorforFoley', '2WayFoleyCatheter', '3WayConnectorforFoley', '3Waystopcock', 'AlcoholBottle', 'AlcoholPad', 'BootCover', 'CottonBall', 'CottonSwap', 'Dilator', 'DisposableInfusionSet', 'ExtensionTube', 'FaceShield', 'FrontLoadSyringe', 'GauzePad', 'Glove', 'GuideWire', 'LiquidBottle', 'Mask', 'NGTube', 'NasalCannula', 'Needle', 'OxygenMask', 'PPESuit', 'PharmaceuticalProduct', 'Pill', 'PillBottle', 'PrefilledHumidifier', 'PressureConnectingTube', 'ReusableHumidifier', 'SodiumChlorideBag', 'SterileHumidifierAdapter', 'SurgicalBlade', 'SurgicalCap', 'SurgicalSuit', 'Syringe', 'TrachealTube', 'UrineBag', 'Vaccinebottle', 'WingedInfusionSet']
-class_names_4group = ['1-InfectionWaste', '2-BloodSecretionWaste', '3-LabWardWaste', '4-VaccineOtherWaste']
+#class_names_41classes = ['1WayConnectorforFoley', '2WayConnectorforFoley', '2WayFoleyCatheter', '3WayConnectorforFoley', '3Waystopcock', 'AlcoholBottle', 'AlcoholPad', 'BootCover', 'CottonBall', 'CottonSwap', 'Dilator', 'DisposableInfusionSet', 'ExtensionTube', 'FaceShield', 'FrontLoadSyringe', 'GauzePad', 'Glove', 'GuideWire', 'LiquidBottle', 'Mask', 'NGTube', 'NasalCannula', 'Needle', 'OxygenMask', 'PPESuit', 'PharmaceuticalProduct', 'Pill', 'PillBottle', 'PrefilledHumidifier', 'PressureConnectingTube', 'ReusableHumidifier', 'SodiumChlorideBag', 'SterileHumidifierAdapter', 'SurgicalBlade', 'SurgicalCap', 'SurgicalSuit', 'Syringe', 'TrachealTube', 'UrineBag', 'Vaccinebottle', 'WingedInfusionSet']
+#class_names_4group = ['1-InfectionWaste', '2-BloodSecretionWaste', '3-LabWardWaste', '4-VaccineOtherWaste']
+class_name_Durian = ['Algal_Leaf_Spot', 'Leaf_Spot', 'Leaf_Blight', 'No_Disease']
 
 # -------------- Tensor-flow load model ------------
 
+# Durian Classification Model
+model_durian_path = './model/Durina_DataModels.pb'
+model_durian = tf.keras.models.load_model(model_durian_path)
+
 # 41 Classes Classification Model
-model_41classes_path = './model/41CLASSES-EfficientNetB5-epoch2000.pb'
-model_41classes = tf.keras.models.load_model(model_41classes_path)
+#model_41classes_path = './model/41CLASSES-EfficientNetB5-epoch2000.pb' # โหลดโมเดวจากสคลิป เปลี่ยนโมเดว
+#model_41classes = tf.keras.models.load_model(model_41classes_path)
 
 # 4 Main Groups Classification Model
 model_4group_path = './model/4G-EfficientNetB5-epoch2000.pb'
 model_4group = tf.keras.models.load_model(model_4group_path)
 
+# model_Durian YoloV5 Object Detection Model
+#net_yolov5 = cv.dnn.readNet('./model/yolov5/yolov5s.pt', './model/yolov5/yolov5s.yaml')
+#net_yolov5.setPreferableBackend(cv.dnn.DNN_BACKEND_CUDA)
+#net_yolov5.setPreferableTarget(cv.dnn.DNN_TARGET_CUDA_FP16)
+#model_yolov5 = cv.dnn_DetectionModel(net_yolov5)
+#model_yolov5.setInputParams(size=(416, 416), scale=1/255, swapRB=True, crop=False)
+#CONFIDENCE_THRESHOLD = 0.1
+#NMS_THRESHOLD = 0.4
+# generate different colors for different classes
+#COLORS = np.random.uniform(0, 255, size=(len(class_name_Durian), 3))
+
 # model_41classes YoloV4 Object Detection Model
-net_yolov4 = cv.dnn.readNet('./model/yolo_v4_41CLASSES/yolov4-obj_best.weights','./model/yolo_v4_41CLASSES/yolov4-obj.cfg') #, "./model/yolo_v4_41CLASSES/yolov4-obj.cfg"
+net_yolov4 = cv.dnn.readNet('./model/yolo_v4_DurinaCLASSES/yolov4-obj_best.weights','./model/yolo_v4_DurinaCLASSES/yolov4-obj.cfg') #, "./model/yolo_v4_41CLASSES/yolov4-obj.cfg"
 net_yolov4.setPreferableBackend(cv.dnn.DNN_BACKEND_CUDA)
 net_yolov4.setPreferableTarget(cv.dnn.DNN_TARGET_CUDA_FP16)
 model_yolov4 = cv.dnn_DetectionModel(net_yolov4)
@@ -38,7 +54,7 @@ model_yolov4.setInputParams(size=(416, 416), scale=1/255, swapRB=True, crop=Fals
 CONFIDENCE_THRESHOLD = 0.1
 NMS_THRESHOLD = 0.4
 # generate different colors for different classes 
-COLORS = np.random.uniform(0, 255, size=(len(class_names_41classes), 3))
+COLORS = np.random.uniform(0, 255, size=(len(class_name_Durian), 3))
 
 app = Flask(__name__,static_url_path='/static')
 #app.config['SECRET_KEY'] = 'Lady Gaga, Bradley Cooper - Shallow (from A Star Is Born) (Official Music Video)'
@@ -52,7 +68,7 @@ app.config['JSON_SORT_KEYS'] = False
 @app.route('/')
 #@cross_origin(origin='https://medwaste-ai.gezdev.com',headers=['Content-Type','Authorization'])
 # @cross_origin(origin='*')
-def show_index():
+def show_index(): # ดึงหน้า Index
     return render_template('index.html')
 #     str =  """<!DOCTYPE html>
 # <html>
@@ -93,11 +109,11 @@ def predictYolov4_41classes(im_path):
     predict_probs = ''
     for (classid, score, box) in zip(classes, scores, boxes):
         color = COLORS[int(classid)]
-        label = "%s:%.2f%%" % (class_names_41classes[classid[0]],score*100.0)
+        label = "%s:%.2f%%" % (class_name_Durian[classid[0]],score*100.0)
         cv.rectangle(img, box, color, img_height//250)
         cv.putText(img, label, (box[0], box[1]+box[3] - 30), cv.FONT_HERSHEY_SIMPLEX, img_height/200, color, img_height//250)
         box_str = '"%d,%d,%d,%d"' % (box[0],box[1],box[2],box[3])
-        predict_probs += '{"objName":"%s", "confRate":"%f", "box":%s},' % (class_names_41classes[int(classid)], score*100.0,box_str)
+        predict_probs += '{"objName":"%s", "confRate":"%f", "box":%s},' % (class_name_Durian[int(classid)], score*100.0,box_str)
     time_now_hash = hash_str(str(datetime.now()))
     result_filepath = './static/'+time_now_hash+'pred.png'
     cv.imwrite(result_filepath,img)
@@ -130,8 +146,9 @@ def yolov4_41():
         im_path = os.path.join(app.config['im_cache_path'], filename)
         file.save(im_path)
         #predict_message = predictYolov4_41classes(im_path) # for debug
+        predict_message = predictYolov4_41classes(im_path)
         try:
-            predict_message = predictYolov4_41classes(im_path)
+            #predict_message = predictYolov4_41classes(im_path)
             success = True
         except:
             success = False
@@ -156,14 +173,14 @@ def predictClassify_41classes(im_path):
     img_array = image.img_to_array(img)
     img_batch = np.expand_dims(img_array, axis=0)
     img_preprocessed = preprocess_input(img_batch)
-    prediction = model_41classes.predict(img_preprocessed)
-    predict_probs = {class_names_41classes[i]: prediction[0][i]*100.0 for i in range(len(class_names_41classes))}
+    prediction = model_durian.predict(img_preprocessed) #โมเดวเปลี่ยนใหม่
+    predict_probs = {class_name_Durian[i]: prediction[0][i]*100.0 for i in range(len(class_name_Durian))}
     sorted_predict_probs = dict(sorted(predict_probs.items(), key=lambda item: item[1], reverse=True))
     #print(sorted_predict_probs)
     return sorted_predict_probs
 
-
-@app.route('/class41', methods=['POST'])
+# ส่วนการนำภาพมาโปรเสท
+@app.route('/class41', methods=['POST']) 
 #@cross_origin(origin='https://medwaste-ai.gezdev.com',headers=['Content-Type','Authorization'])
 #@cross_origin(origin='*')
 def classify41():
@@ -207,18 +224,18 @@ def classify41():
         return resp
 
 def predictClassify_4G(im_path):
-    img = image.load_img(im_path, target_size=(456, 456)) # B5 -> img_height_width=456
+    img = image.load_img(im_path, target_size=(600, 600 )) # B5 -> img_height_width=456
     img_array = image.img_to_array(img)
     img_batch = np.expand_dims(img_array, axis=0)
     img_preprocessed = preprocess_input(img_batch)
-    prediction = model_4group.predict(img_preprocessed)
-    predict_probs = {class_names_4group[i]: prediction[0][i]*100.0 for i in range(len(class_names_4group))}
+    prediction = model_durian.predict(img_preprocessed)
+    predict_probs = {class_name_Durian[i]: prediction[0][i]*100.0 for i in range(len(class_name_Durian))}
     sorted_predict_probs = dict(sorted(predict_probs.items(), key=lambda item: item[1], reverse=True))
     #print(sorted_predict_probs)
     return sorted_predict_probs
 
 
-@app.route('/class4G', methods=['POST'])
+@app.route('/Dur', methods=['POST'])
 #@cross_origin(origin='https://medwaste-ai.gezdev.com',headers=['Content-Type','Authorization'])
 #@cross_origin(origin='*')
 def classify4G():
@@ -240,8 +257,9 @@ def classify4G():
         im_path = os.path.join(app.config['im_cache_path'], filename)
         file.save(im_path)
         #predict_message = predictClassify_41classes(im_path) # for debug
+        predict_message = predictClassify_4G(im_path)
         try:
-            predict_message = predictClassify_4G(im_path)
+            #predict_message = predictClassify_4G(im_path)
             success = True
         except:
             success = False
